@@ -1,6 +1,7 @@
 from factory import create_user
-from hasher import security_feedback, hasher, verify_password
+from hasher import hasher, verify_password
 from entities import User
+from policies import username_policy, security_feedback, password_policy
 import re
 
 password_input = input("type password")
@@ -28,7 +29,7 @@ new_user_sucess = create_user(valid_username,valid_password)
 if new_user_sucess:
     print("sucess!")
     print(f"\n deu certo. objeto criado : {new_user_sucess.user_info()}")
-    print(f" Hash guardado - {new_user_sucess._password_hash[:15]}")
+    print(f" Hash guardado - {new_user_sucess._password_hash[:40]}")
 
 else: 
     print("num criou")
