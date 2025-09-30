@@ -16,3 +16,15 @@ def password_policy(password):
         return True
     else:
         return False
+    
+def security_feedback(password):
+    print("Your password is not strong enough")
+    print("Please make sure your password has the following :")
+    if not re.search(r"[A-Z]",password):
+        print("At least one capital letter.")
+    if not re.search(r"[a-z]",password):
+        print("At least one lower letter.")
+    if not re.search(r"[0-9]",password):
+        print("At least one number")
+    if not re.search(r"[^A-Za-z\d\s]",password):
+        print("At least one special character.")
