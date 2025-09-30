@@ -20,6 +20,8 @@ def security_feedback(password):
         print("At least one number")
     if not re.search(r"[^A-Za-z\d\s]",password):
         print("At least one special character.")
+    if len(password) < 8 or len(password) > 16:
+        print("Lenght between 8 and 16 characters.")
 
 def username_policy(username:str):
     username_pattern = r"^[a-zA-Z0-9._-]{5,20}"
