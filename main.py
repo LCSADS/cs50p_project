@@ -1,50 +1,43 @@
 from factory import create_user
-from hasher import hasher, verify_password
-from entities import User
-from policies import username_policy, security_feedback, password_policy
-from user_input import confirm, get_valid_password, get_valid_username
-import re
+from auth import login
+from storage import save_user, find_user
+from policies import security_feedback 
+from user_input import get_valid_password, get_valid_username
+from hasher import verify_password
 
-password_input = get_valid_password()
+print("\nconceito")
+print("\nCriação de usuário")
+username = get_valid_username()
+password = get_valid_password()
 
-passhash = hasher(password_input)
-print(f" Hash : {passhash}")
-
-print("password checked")
-
-username_input = get_valid_username()
-
-verification = verify_password(password_input,passhash)
-
-print(f" Return value from password verification : {verification}")
-
-if verification:
-    print("correct output so far")
-else:
-    print("oops")
-
-new_user = create_user(username_input,password_input)
+new_user = create_user(username, password)
 
 if new_user:
-    print("sucesso!")
-    print(f"\n deu certo. objeto criado : {new_user.user_info()}")
-    print(f" Hash guardado - {new_user._password_hash[:40]}")
-
-else: 
-    print("num criou")
-
-
-print("cenario de falha")
-invalid_username = "bob"
-invalid_password = "bob"
-new_user_failure = create_user(invalid_username,invalid_password)
-
-if new_user_failure is None:
-    
-    print(f"sucesso nada foi criado.")
-
-
+    save_user(new_user)
+    print("\nsucesso")
 else:
-    print("ooops")
+    print("\nerro")
+
+login_success = login(username, password)
+
+if login_success:
+    print(f"\nlogin bem sucedido {login_success.username} recuperado do json")
+else:
+    print("\ndeu erro no json")
+print("\ntesting failure to login with wrong password")
+## failure test
+wrong_password = "whatever"
+invalid_password_login = login(username,wrong_password)
+if invalid_password_login is None:
+    print(f"\nSucessfully blocked login with wrong password")
+else:
+    print(f"\nfailure, login was successfull even with the wrong password")
 
 
+print("\ntesting failure to login with invalid username")
+
+invalid_user_login = login("whatever",password)
+if invalid_user_login is None:
+    print(f"\nSucessfully blocked login with wrong username")
+else:
+    print(f"failure. login was successful with a invalid username")

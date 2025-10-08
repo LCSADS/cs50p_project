@@ -1,5 +1,6 @@
 import sys
 from policies import username_policy,password_policy,security_feedback
+from storage import check_username_existence
 
 def confirm(message : str):
     while True:
@@ -23,6 +24,9 @@ def get_valid_username():
         if not username_policy(username):
             print(f"{username} is not a valid username.")
             continue
+        if check_username_existence(username):
+            print(f"The username: '{username}' is already in use. Please choose another one")
+            continue
         if confirm(f"You chose {username} as your username. Continue?"):
             return username
         
@@ -40,3 +44,5 @@ def get_valid_password():
             continue
         
         return password
+    
+
