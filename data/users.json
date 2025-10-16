@@ -1,3 +1,6 @@
 [
-    
+    {
+        "username": "test_account",
+        "password_hash": "$pbkdf2-sha256$29000$5vwfw7hXCsGYcw4BwDjH2A$H6yt1NJo.SzhiBjnbCH6zOVc/cMx6wwjBz7ZMvdgcWU"
+    }
 ]

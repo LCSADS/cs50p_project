@@ -24,7 +24,7 @@ def security_feedback(password):
         print("Lenght between 8 and 16 characters.")
 
 def username_policy(username:str):
-    username_pattern = r"^[a-zA-Z0-9._-]{5,20}"
+    username_pattern = r"^[a-zA-Z0-9._-]{5,20}$"
     chosen_username = username
     if re.search(username_pattern,chosen_username):
         return True
