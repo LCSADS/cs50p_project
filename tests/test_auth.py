@@ -2,8 +2,7 @@ from auth import login
 import pytest
 from factory import create_user
 from storage import load_users,save_user
-# below syntax is required to use monkeypatch
-import storage.user_storage
+import storage
 from entities import User
 
 test_username = "testuser"
@@ -13,7 +12,8 @@ test_password = "V@lidPassw0rd"
 def storage_setup(monkeypatch,tmp_path):
 # create temp path to use a temp json file for tests
     temp_json = tmp_path / "test_user.json"
-# using the storage import here, changes the json_path variable in the storage module
+# modifies the json_path variable inside storage > user_storage temporarily so that we can test without touching the actual json file
+# syntax for monkeypatch is package/module/variable
     monkeypatch.setattr("storage.user_storage.json_path", temp_json)
 # creates and saves the new user on the temp path and temp json
     test_user = create_user(test_username,test_password)
