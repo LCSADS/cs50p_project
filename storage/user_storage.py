@@ -58,3 +58,4 @@ def check_username_existence(username):
         return False
     else:
         return True
+    
