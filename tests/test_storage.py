@@ -19,7 +19,7 @@ def storage_setup(monkeypatch,tmp_path,valid_user_dict):
 @pytest.fixture
 def valid_user_dict(valid_username,valid_hash):
     return {'username': valid_username,'password_hash': valid_hash}
-
+            
 @pytest.fixture
 def valid_username():
     return "test_user"

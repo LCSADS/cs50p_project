@@ -24,9 +24,37 @@ def security_feedback(password):
         print("Lenght between 8 and 16 characters.")
 
 def username_policy(username:str):
-    username_pattern = r"^[a-zA-Z0-9._-]{5,20}$"
+    username_pattern = re.compile(r'^(?=.{5,20}$)(?!.*[._-]{2})(?!.*(.)\1\1)[A-Za-z][A-Za-z0-9._-]*[A-Za-z0-9]$')
     chosen_username = username
     if re.search(username_pattern,chosen_username):
         return True
     else:
         return False
+    
+def invalid_username_feedback(username:str):
+    
+    # check username lenght
+    if len(username) < 5 or len(username) > 20:
+        print(f"In between 5 and 20 characters.")
+    
+    # check if the username starts with a letter
+    if not re.match(r"^[A-Za-z]",username):
+        print(f"The starting character must be a letter")
+    
+    # check if the last character is alphanumeric
+    if not re.search(r"[A-Za-z0-9]$", username):
+        print(f"The last character should be a letter or a number.")
+
+    # check if the username has any forbidden characters like a $
+    if re.search(r"[^A-Za-z0-9._-]",username):
+        print(f"Only letters, digits, dots, underscores and hyphens are allowed")
+
+    # check if there's adjacent separators like ---- or __ or ._.
+    if re.search(r"[._-]{2}",username):
+        print(f"No two separators in a row. I.E : ._ or .. or __")
+   
+    # check if there's 3 characters repeating in a row.
+    if re.search(r"(.)\1\1",username):
+        print(f"No characters can appear 3 times in a row.")
+
+

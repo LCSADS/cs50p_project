@@ -66,7 +66,7 @@ def test_confirm_invalid_user_answer_and_exit(monkeypatch,capsys,fake_input_sequ
 ]
 )
 
-def test_confirm_valid_user_is_case_insensitive(monkeypatch,user_input,expected):
+def test_confirm_valid_user_answer_is_case_insensitive(monkeypatch,user_input,expected):
     monkeypatch.setattr(builtins,"input",lambda _: user_input)
     answer = confirm("Example question")
     assert answer is expected
@@ -90,12 +90,25 @@ def test_confirm_message_passed_to_input(monkeypatch):
 
 
 def test_get_valid_username_loop_interaction_invalid_then_valid(monkeypatch,capsys,fake_input_sequence,valid_username,invalid_username):
+    
     def mock_check_username_existence(username_input):
         return False
+    
     def mock_username_policy(username_input):
         return username_input == valid_username
+    
+    
+    # feedback_called is a variable with a list outside the function because invalid_username_feedback doesn't return a value
+    # and since dictionaries are mutable, the function can change it's contents.
+    feedback_called = {"count":0}
+    def mock_invalid_username_feedback(username_input):
+        feedback_called["count"] += 1
+        print(f"feedback called")
+        
+    
     monkeypatch.setattr(ui.storage,"check_username_existence",mock_check_username_existence)
     monkeypatch.setattr(ui.policies,"username_policy",mock_username_policy)
+    monkeypatch.setattr(ui.policies,"invalid_username_feedback",mock_invalid_username_feedback)
 
 # tests interaction > input invalid username > asks for another username > inputs valid username
 
@@ -106,6 +119,8 @@ def test_get_valid_username_loop_interaction_invalid_then_valid(monkeypatch,caps
     output = capsys.readouterr().out
     assert f"{invalid_username} is not a valid username." in output, "invalid username warning didn't show up for the user"
     assert chosen_username == valid_username, "returned username didn't match"
+    assert feedback_called["count"] == 1
+
 
 def test_get_valid_password_loop_interaction_invalid_then_valid(monkeypatch,capsys,fake_input_sequence,valid_password,invalid_password):
     def mock_password_policy(password_input):

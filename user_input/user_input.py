@@ -22,7 +22,8 @@ def get_valid_username():
         username = input("Please choose your username: ").strip()
 
         if not policies.username_policy(username):
-            print(f"{username} is not a valid username.\n Please make sure your username contains no blank spaces and is between 5 and 20 characters in length")
+            print(f"{username} is not a valid username.")
+            policies.invalid_username_feedback(username)
             continue
         if storage.check_username_existence(username):
             print(f"The username: '{username}' is already in use. Please choose another one")
