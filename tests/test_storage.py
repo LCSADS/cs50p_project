@@ -3,34 +3,6 @@ from entities import User
 import storage
 import json
 
-@pytest.fixture
-def mock_load_users(monkeypatch,valid_user):
-    def mock():
-        return [valid_user]
-    monkeypatch.setattr(storage.user_storage,"load_users",mock)
-    return mock
-
-@pytest.fixture
-def storage_setup(monkeypatch,tmp_path,valid_user_dict):
-    temp_json = tmp_path / "test_user.json"
-    monkeypatch.setattr(storage.user_storage,"json_path", temp_json)
-    temp_json.write_text(json.dumps([valid_user_dict]))
-
-@pytest.fixture
-def valid_user_dict(valid_username,valid_hash):
-    return {'username': valid_username,'password_hash': valid_hash}
-            
-@pytest.fixture
-def valid_username():
-    return "test_user"
-
-@pytest.fixture
-def valid_hash():
-    return "valid_test_hash"
-
-@pytest.fixture
-def valid_user(valid_username,valid_hash):
-    return User(username=valid_username,password_hash=valid_hash)
 
 def test_user_to_dict(valid_user):
     user_dictionary = storage.user_to_dict(valid_user)
@@ -44,7 +16,7 @@ def test_dict_to_user(valid_user_dict):
     assert user_object.username == test_dict['username']
     assert user_object._password_hash == test_dict['password_hash']
 
-def test_load_users(storage_setup):
+def test_load_users(storage_setup_with_dict):
     result = storage.load_users()
     assert result != []
     assert isinstance(result[0],User)
@@ -80,7 +52,7 @@ def test_check_username_existence(monkeypatch,valid_username,valid_user):
     assert username_exists == True
     assert non_existent_username == False
 
-def test_save_user_integrated(storage_setup,tmp_path,valid_user,valid_username):
+def test_save_user_integrated(storage_setup_with_dict,tmp_path,valid_user,valid_username):
     temp_json = tmp_path / "test_user.json"
     storage.user_storage.json_path = temp_json
     new_user = User(username="new_test_user",password_hash="new_test_hash")

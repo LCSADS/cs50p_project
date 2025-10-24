@@ -2,13 +2,6 @@ import pytest
 from factory import create_user
 from entities import User
 
-@pytest.fixture
-def valid_username():
-    return "validuser"
-
-@pytest.fixture
-def valid_password():
-    return "V@lidPassw0rd!"
 
 def test_object_creation(valid_username,valid_password):
     new_user = create_user(valid_username,valid_password)

@@ -6,42 +6,6 @@ import storage
 # below import needed to properly mock check_username_exitence
 import user_input.user_input as ui
 
-class Fake_Sequencial_Inputs:
-    def __init__(self,inputs):
-        self.inputs = list(inputs)
-        self.index = 0
-    
-    def __call__(self,prompt):
-        if self.index >= len(self.inputs):
-            raise IndexError("No more fake inputs provided")
-        input = self.inputs[self.index]
-        self.index += 1
-        return input
-
-@pytest.fixture
-def fake_input_sequence():
-# fake sequencial inputs factory
-    def fake_input_factory(inputs):
-        return Fake_Sequencial_Inputs(inputs)
-    return fake_input_factory
-        
-@pytest.fixture
-def valid_username():
-    return "lucas"
-
-@pytest.fixture
-def invalid_username():
-    return "thisusernameiswaytoobig!!!!!!"
-
-@pytest.fixture
-def valid_password():
-    return "V@lidPassw0rd"
-
-@pytest.fixture
-def invalid_password():
-    return "invalid"
-
-
 
 def test_confirm_invalid_user_answer_and_exit(monkeypatch,capsys,fake_input_sequence):
 # last value is "" for it to call sys exit as it does in the confirm function. 

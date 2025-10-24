@@ -1,10 +1,6 @@
 import pytest
 from hasher import hasher,verify_password
 
-@pytest.fixture
-def valid_password():
-    return "V@lidPassw0rd"
-
 
 # test pass hashing with the fixed $pbkdf2-sha256$ that comes at the start of each hash, ensuring it's a valid pbkdf2-sha256 as implemented
 
